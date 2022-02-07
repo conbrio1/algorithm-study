@@ -1,0 +1,82 @@
+package boj.boj3025;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.StringTokenizer;
+
+public class Main {
+    public static char[][] map;
+    public static int[] input;
+    
+
+    public static void nextStone(int row, int col) {
+        for (int i = row; i <= map.length - 2; i++) {
+            // nextStone(i, col -1 or +1)로 재귀
+            switch (map[i + 1][col]) {
+                case 'O':
+                    // LEFT
+                    if (col - 1 >= 0 && i + 1 <= map.length - 1) {
+                        if (map[i][col - 1] == '.' && map[i + 1][col - 1] == '.') {
+                            nextStone(i, col - 1);
+                            return;
+                        }
+                    }
+                    // RIGHT
+                    if (col + 1 <= map[0].length - 1 && i + 1 <= map.length - 1) {
+                        if (map[i][col + 1] == '.' && map[i + 1][col + 1] == '.') {
+                            nextStone(i, col + 1);
+                            return;
+                        }
+                    }
+                    // STOP
+                    map[i][col] = 'O';
+                    break;
+                case 'X':
+                    map[i][col] = 'O';
+                    return;
+                case '.':
+                    if (i == map.length - 2) {
+                        map[i + 1][col] = 'O';
+                        return;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    public static void solve() {
+        for (int i = 0; i < input.length; i++) {
+            nextStone(0, input[i] - 1);
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringBuilder sb = new StringBuilder();
+
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        int R = Integer.parseInt(st.nextToken());
+        int C = Integer.parseInt(st.nextToken());
+
+        map = new char[R][];
+        for (int i = 0; i < R; i++)
+            map[i] = br.readLine().toCharArray();
+
+        int N = Integer.parseInt(br.readLine());
+        input = new int[N];
+        for (int i = 0; i < N; i++)
+            input[i] = Integer.parseInt(br.readLine());
+
+        solve();
+
+        for (int i = 0; i < R; i++)
+            sb.append(map[i]).append("\n");
+        bw.write(sb.toString());
+        bw.close();
+    }
+}

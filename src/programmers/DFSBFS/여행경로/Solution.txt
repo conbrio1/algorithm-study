@@ -1,0 +1,41 @@
+package programmers.DFSBFS.여행경로;
+
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+
+public class Solution {
+    public static void main(String[] args) {
+        String[][] tickets1 = {{"ICN", "JFK"}, {"HND", "IAD"}, {"JFK", "HND"}};
+        String[][] tickets2 = {{"ICN", "SFO"}, {"ICN", "ATL"}, {"SFO", "ATL"}, {"ATL", "ICN"}, {"ATL","SFO"}};
+
+        System.out.println(Arrays.toString(solution(tickets1)));
+        System.out.println(Arrays.toString(solution(tickets2)));
+    }
+
+    public static String[] solution(String[][] tickets) {
+        LinkedList<String> answerList = new LinkedList<>();
+
+        PriorityQueue<String> pQueue = new PriorityQueue<>();
+        boolean[] used = new boolean[tickets.length];
+        pQueue.offer("ICN");
+
+        while (!pQueue.isEmpty()) {
+            String now = pQueue.poll();
+            answerList.offer(now);
+
+            for (int i = 0; i < tickets.length; i++) {
+                if (used[i] || !now.equals(tickets[i][0]))
+                    continue;
+
+                pQueue.offer(tickets[i][1]);
+                used[i] = true;
+            }
+        }
+        return answerList.toArray(new String[0]);
+    }
+}
+// https://stackoverflow.com/questions/53284214/toarray-with-pre-sized-array
+// https://stackoverflow.com/questions/9572795/convert-list-to-array-in-java
+
+// 실패 DFS로 다시 도전

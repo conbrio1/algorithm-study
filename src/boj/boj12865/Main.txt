@@ -1,0 +1,45 @@
+package boj.boj12865;
+// 평범한 배낭
+
+// DP
+// 냅색 - 1차원 배열 버전
+// https://dudri63.github.io/2019/01/29/algo22/
+// https://chanhuiseok.github.io/posts/improve-6/
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+    static int[] mem;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+
+        int N = Integer.parseInt(st.nextToken());
+        int limit = Integer.parseInt(st.nextToken());
+
+        mem = new int[limit + 1];
+        int[] weight = new int[N];
+        int[] value = new int[N];
+
+        for(int n = 0; n < N; n++) {
+            st = new StringTokenizer(br.readLine(), " ");
+            weight[n] = Integer.parseInt(st.nextToken());
+            value[n] = Integer.parseInt(st.nextToken());
+        }
+
+        System.out.println(solution(weight, value, limit));
+    }
+
+    private static int solution(int[] weight, int[] value, int limit) {
+        for (int i = 0; i < weight.length; i++) {
+            for (int w = limit; w >= 1; w--) {
+                if (weight[i] <= w)
+                    mem[w] = Math.max(mem[w], mem[w - weight[i]] + value[i]);
+            }
+        }
+        return mem[limit];
+    }
+}

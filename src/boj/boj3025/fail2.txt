@@ -1,0 +1,119 @@
+package boj.boj3025;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.StringTokenizer;
+
+public class Main {
+    public static int R, C, N;
+    public static char[][] map;
+    public static int[] input;
+
+    public static final int[] LEFT = { 0, -1 };
+    public static final int[] RIGHT = { 0, 1 };
+    public static final int[] DOWN = { 1, 0 };
+    public static final int[] STOP = { 0, 0 };
+
+    public static int[][][] dirMap;
+
+    public static boolean check(int row, int col, int direction) {
+        // direction = -1: 왼쪽 확인, direction = 1: 오른쪽 확인
+        if (direction == -1 && col - 1 >= 0) {
+            if (map[row][col + direction] == '.' && map[row - 1][col + direction] == '.') {
+                return true;
+            }
+        } else if (direction == 1 && col + 1 <= C - 1) {
+            if (map[row][col + direction] == '.' && map[row - 1][col + direction] == '.') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void update(int row, int col) {
+        // LEFT
+        if (check(row, col, -1)) {
+            dirMap[row - 1][col] = LEFT;
+        }
+        // RIGHT
+        else if (check(row, col, 1)) {
+            dirMap[row - 1][col] = RIGHT;
+        }
+        // STOP
+        else {
+            dirMap[row - 1][col] = STOP;
+        }
+    }
+
+    public static void nextStone(int col) {
+        int row = 0;
+        while (dirMap[row][col] != STOP) {
+            row += dirMap[row][col][0];
+            col += dirMap[row][col][1];
+        }
+        map[row][col] = 'O';
+
+        if (col - 1 >= 0) {
+            // 떨어진 자리 왼쪽에 돌이 있는 경우
+            if (map[row][col - 1] == 'O') {
+                update(row, col - 1);
+            }
+        }
+        if (col + 1 <= C - 1) {
+            // 떨어진 자리 오른쪽에 돌이 있는 경우
+            if (map[row][col + 1] == 'O') {
+                update(row, col + 1);
+            }
+        }
+
+        // 떨어진 자리 업데이트
+        update(row, col);
+    }
+
+    public static void solve() {
+        for (int i = 0; i < N; i++) {
+            nextStone(input[i] - 1);
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringBuilder sb = new StringBuilder();
+
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        R = Integer.parseInt(st.nextToken());
+        C = Integer.parseInt(st.nextToken());
+
+        map = new char[R][C];
+        dirMap = new int[R][C][];
+
+        for (int i = 0; i < R; i++) {
+            for (int j = 0; j < C; j++) {
+                map[i][j] = (char) br.read();
+
+                if (map[i][j] == 'X')
+                    dirMap[i - 1][j] = STOP;
+                else if (i == R - 1)
+                    dirMap[i][j] = STOP;
+                else if (map[i][j] == '.')
+                    dirMap[i][j] = DOWN;
+            }
+            br.read(); // '\n'
+        }
+
+        N = Integer.parseInt(br.readLine());
+        input = new int[N];
+        for (int i = 0; i < N; i++)
+            input[i] = Integer.parseInt(br.readLine());
+        solve();
+
+        for (int i = 0; i < R; i++)
+            sb.append(map[i]).append("\n");
+
+        bw.write(sb.toString());
+        bw.close();
+    }
+}

@@ -1,0 +1,146 @@
+package boj.boj15684;
+// 사다리 조작
+// https://www.acmicpc.net/source/32763930
+// 너무 복잡하게 생각하지 말 것
+// 최대한 간략하게 풀 수 있는 방법을 생각하자
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.StringTokenizer;
+
+public class Main {
+    static int N, M, H;
+
+    static class Path {
+        int row;
+        int[] col;
+
+        public Path(int rowNum, int startCol) {
+            this.row = 0;
+            this.col = new int[rowNum];
+            this.col[0] = startCol;
+        }
+
+        // row : 탐색 시작하는 행
+        public void updatePath(int[][] map) {
+            while (true) {
+                int r = this.row;
+                int c = this.col[r];
+
+                if (r == H + 1)
+                    break;
+
+                if (map[r + 1][c - 1] == 1)
+                    this.col[++this.row] = c - 2;
+                else if (map[r + 1][c + 1] == 1)
+                    this.col[++this.row] = c + 2;
+                else
+                    this.col[++this.row] = c;
+            }
+        }
+    }
+
+    static boolean check(int[][] map) {
+        boolean isFinished = true;
+        for (int i = 0; i < N; i++) {
+            Path path = new Path(H + 2, 2 * i + 1);
+            path.updatePath(map);
+            if (path.col[H + 1] != 2 * i + 1) {
+                isFinished = false;
+                break;
+            }
+        }
+        return isFinished;
+    }
+
+    static boolean pickLadders(int[][] map, ArrayList<int[]> available, LinkedList<int[]> picked, int index, int num) {
+        if (picked.size() == num) {
+            // 배치
+            for (int[] ladder : picked)
+                map[ladder[0]][ladder[1]] = 1;
+
+            // 확인
+            if (check(map))
+                return true;
+
+            // 원복
+            for (int[] ladder : picked)
+                map[ladder[0]][ladder[1]] = 0;
+
+            return false;
+        }
+
+        for (int i = index; i < available.size(); i++) {
+            int r = available.get(i)[0];
+            int c = available.get(i)[1];
+
+            for (int[] ladder : picked) {
+                if (ladder[1] == c - 1 || ladder[1] == c + 1)
+                    continue;
+            }
+
+            picked.add(new int[] { r, c });
+            if (pickLadders(map, available, picked, index + 1, num))
+                return true;
+            picked.pollLast();
+        }
+
+        return false;
+    }
+
+    static int solution(int[][] map, ArrayList<int[]> available) {
+        for (int i = 0; i <= 3; i++) {
+            if (pickLadders(map, available, new LinkedList<>(), 0, i))
+                return i;
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        H = Integer.parseInt(st.nextToken());
+
+        // map : 사다리 1, 나머지 0
+        int[][] map = new int[H + 2][2 * N + 1];
+        for (int i = 0; i < H + 2; i++) {
+            for (int j = 1; j < 2 * N; j += 2) {
+                map[i][j] = 1;
+            }
+        }
+
+        // 입력값에 따라 사다리 이어주기
+        for (int i = 0; i < M; i++) {
+            st = new StringTokenizer(br.readLine(), " ");
+
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            map[a][2 * b] = 1;
+        }
+
+        // available : 사다리가 놓일 수 있는 {행, 열}
+        ArrayList<int[]> available = new ArrayList<>();
+        for (int i = 1; i <= H; i++) {
+            for (int j = 2; j < 2 * N; j += 2) {
+                if (map[i][j] == 1)
+                    continue;
+                if (j != 2 * N - 2)
+                    if (map[i][j + 2] == 1)
+                        continue;
+                if (j != 2)
+                    if (map[i][j - 2] == 1)
+                        continue;
+
+                available.add(new int[] { i, j });
+            }
+        }
+
+        System.out.println(solution(map, available));
+    }
+}
