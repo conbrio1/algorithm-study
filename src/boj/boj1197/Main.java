@@ -17,7 +17,7 @@ public class Main {
         int V = Integer.parseInt(st.nextToken());
         int E = Integer.parseInt(st.nextToken());
         for (int i = 0; i < E; i++) {
-
+            // TODO
         }
     }
 }

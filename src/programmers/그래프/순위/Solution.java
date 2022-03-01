@@ -17,6 +17,7 @@ public class Solution {
 
     // dfs 활용
     public static int solution1(int n, int[][] results) {
+        // 인접 리스트
         ArrayList<LinkedList<int[]>> adjList = new ArrayList<>(n + 1);
         for (int i = 0; i <= n; i++) {
             adjList.add(new LinkedList<>());

@@ -1,6 +1,8 @@
 package programmers.그리디.섬_연결하기;
 // https://ongveloper.tistory.com/376
-// Kruskal + Union & Find 알고리즘 사용
+// Kruskal + Union-Find 알고리즘 사용
+// 그래프 + 그리디
+// MST
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -30,25 +32,25 @@ public class Solution {
     }
 
     // find
-    public static int getParent(int node, int[] parent) {
+    public static int findParent(int node, int[] parent) {
         if (parent[node] == node)
             return node;
         else
-            return parent[node] = getParent(parent[node], parent);
+            return parent[node] = findParent(parent[node], parent);
     }
 
     // union
     public static void unionParent(int a, int b, int[] parent) {
-        a = getParent(a, parent);
-        b = getParent(b, parent);
+        a = findParent(a, parent);
+        b = findParent(b, parent);
 
         if (a < b) parent[b] = a;
         else parent[a] = b;
     }
 
     public static boolean isCycling(int a, int b, int[] parent) {
-        a = getParent(a, parent);
-        b = getParent(b, parent);
+        a = findParent(a, parent);
+        b = findParent(b, parent);
 
         return a == b;
     }
