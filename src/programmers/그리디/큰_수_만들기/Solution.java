@@ -1,7 +1,7 @@
 package programmers.그리디.큰_수_만들기;
 // https://velog.io/@soo5717/프로그래머스-큰-수-만들기-파이썬
 // https://ukyonge.tistory.com/197
-// 스택을 이용한 방법 기억해둘 것!
+// 스택을 이용한 방법 기억해둘 것! 스택을 사용하여 풀이하는 것이 더 바람직해 보임. (그리디)
 // 첫번째 방법과 같이 빼야하는 수가 아닌 결과로 나와야 하는 수의 길이에 집중하여 비교하는 방법도 참고하자.
 
 public class Solution {
@@ -20,6 +20,7 @@ public class Solution {
     }
 
     // 1 2 3 4 5 중 2개 제거 -> 5 - 2 = 3, 3자리를 리턴해야 함(len - k) -> idx 0 ~ 2 (len - (len - k)) 까지 비교
+    // 3을 선택한다고 하더라도 4, 5 두개를 더 선택할 수 있기 때문.
     public static String solution1(String number, int k) {
         int idx = 0;
         StringBuilder sb = new StringBuilder();
@@ -36,6 +37,7 @@ public class Solution {
         return sb.toString();
     }
 
+    // stack을 이용한 풀이
     public static String solution2(String number, int k) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < number.length(); i++) {
