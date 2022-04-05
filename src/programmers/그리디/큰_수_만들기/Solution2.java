@@ -1,10 +1,10 @@
-package programmers.skillcheck.level2.큰_수_만들기;
+package programmers.그리디.큰_수_만들기;
 // 그리디, 스택
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class Solution {
+public class Solution2 {
     public String solution(String number, int k) {
         // StringBuilder sb를 스택으로 사용한다.
         StringBuilder sb = new StringBuilder();
