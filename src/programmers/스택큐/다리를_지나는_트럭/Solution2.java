@@ -1,4 +1,4 @@
-package programmers.skillcheck.level2.다리를_지나는_트럭;
+package programmers.스택큐.다리를_지나는_트럭;
 // 큐 활용
 
 import org.junit.jupiter.api.Assertions;
@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class Solution {
+public class Solution2 {
     public int solution(int bridge_length, int weight, int[] truck_weights) {
         int totalTime = 0;
         Queue<Integer> waitingQueue = new LinkedList<>();
