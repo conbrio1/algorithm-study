@@ -19,6 +19,7 @@ package boj.boj1600;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
@@ -44,6 +45,7 @@ public class Main {
     }
 
     static void solution(char[][] map) {
+        Comparator<Point> comparator = (o1, o2) -> 0;
         boolean[][][] visited = new boolean[H][W][K + 1];
 
         Queue<Point> queue = new LinkedList<>();
